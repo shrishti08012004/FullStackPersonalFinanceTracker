@@ -1,22 +1,23 @@
 require("dotenv").config();
-const express = require("express");
-const cors = require("cors");
-const sequelize = require("./config/db");
+const app = require("./app");
+const { sequelize } = require("./models");
 
-const app = express();
+// Verify DB connection and sync models
+async function start() {
+  try {
+    await sequelize.authenticate();
+    console.log("✅ Database connected");
+    await sequelize.sync();
+    console.log("✅ Database synced");
 
-app.use(cors());
-app.use(express.json());
+    const PORT = process.env.PORT || 5000;
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  } catch (err) {
+    console.error("❌ DB Error:", err);
+    process.exit(1);
+  }
+}
 
-app.get("/", (req, res) => {
-  res.json({ message: "Finance Tracker Backend Running 🚀" });
-});
-
-sequelize.authenticate()
-  .then(() => console.log("✅ Database connected"))
-  .catch(err => console.error("❌ DB Error:", err));
-
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+start();

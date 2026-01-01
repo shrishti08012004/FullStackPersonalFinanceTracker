@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: finance-backend
+    env: node
+    plan: starter
+    region: oregon
+    branch: main
+    root: backend
+    buildCommand: npm install
+    startCommand: npm start
+    # Optional: You can provide env vars here or set them in the Render dashboard
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: JWT_SECRET
+        value: "<set-a-strong-secret-in-render>"
+      - key: DATABASE_URL
+        value: "<set-from-managed-db-or-existing>"
+
+databases:
+  - name: finance-db
+    engine: postgres
+    plan: starter
+    # After Render creates the DB, set the service's DATABASE_URL to the provided connection string
