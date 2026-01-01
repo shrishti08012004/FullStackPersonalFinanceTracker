@@ -12,7 +12,6 @@ app.get("/", (req, res) => {
   res.json({ message: "Finance Tracker Backend Running 🚀" });
 });
 
-// Connect DB
 sequelize.authenticate()
   .then(() => console.log("✅ Database connected"))
   .catch(err => console.error("❌ DB Error:", err));
