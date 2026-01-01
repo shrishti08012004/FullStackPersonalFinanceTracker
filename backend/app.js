@@ -7,7 +7,13 @@ const analyticsRoutes = require("./routes/analytics");
 
 const app = express();
 
-app.use(cors());
+// Configure CORS: allow `FRONTEND_URL` if set, otherwise allow all origins
+const FRONTEND_URL = process.env.FRONTEND_URL || process.env.REACT_APP_API_URL || null;
+if (FRONTEND_URL) {
+	app.use(cors({ origin: FRONTEND_URL }));
+} else {
+	app.use(cors());
+}
 app.use(express.json());
 
 // Root health endpoint
