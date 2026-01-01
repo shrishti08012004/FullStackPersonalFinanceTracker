@@ -1,5 +1,6 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/db");
+const User = require("./User");
 
 const Transaction = sequelize.define("Transaction", {
   amount: {
@@ -18,5 +19,8 @@ const Transaction = sequelize.define("Transaction", {
     type: DataTypes.STRING
   }
 });
+
+User.hasMany(Transaction);
+Transaction.belongsTo(User);
 
 module.exports = Transaction;

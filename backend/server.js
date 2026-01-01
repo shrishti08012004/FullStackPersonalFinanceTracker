@@ -1,21 +1,18 @@
 const express = require("express");
 const cors = require("cors");
-const dotenv = require("dotenv");
-const { sequelize } = require("./models");
+const sequelize = require("./config/db");
 
-dotenv.config();
+const authRoutes = require("./routes/auth");
+const transactionRoutes = require("./routes/transaction");
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use("/api/auth", require("./routes/auth"));
-app.use("/api/transactions", require("./routes/transaction"));
+app.use("/api/auth", authRoutes);
+app.use("/api/transactions", transactionRoutes);
 
-sequelize.sync({ alter: true }).then(() => {
+sequelize.sync().then(() => {
   console.log("Database synced");
-});
-
-app.listen(5000, () => {
-  console.log("Server running on port 5000");
+  app.listen(5000, () => console.log("Server running on port 5000"));
 });
