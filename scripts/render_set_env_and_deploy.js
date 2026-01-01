@@ -19,6 +19,7 @@ const argv = require('minimist')(process.argv.slice(2));
 const DATABASE_URL = argv.db || argv.database || process.env.DATABASE_URL;
 const JWT_SECRET = argv.jwt || process.env.JWT_SECRET || 'replace_this_with_a_real_secret';
 const NODE_ENV = argv.node_env || process.env.NODE_ENV || 'production';
+const FRONTEND_URL = argv.frontend || argv.front || process.env.FRONTEND_URL || null;
 
 const API_BASE = 'https://api.render.com/v1';
 
@@ -83,6 +84,12 @@ async function createDeploy(){
 
     await ensureEnvVar('JWT_SECRET', JWT_SECRET, true);
     await ensureEnvVar('NODE_ENV', NODE_ENV, false);
+
+    if (FRONTEND_URL) {
+      await ensureEnvVar('FRONTEND_URL', FRONTEND_URL, false);
+    } else {
+      console.log('No FRONTEND_URL provided; skipping');
+    }
 
     const deploy = await createDeploy();
     console.log('Deploy triggered:', deploy.id || deploy);
